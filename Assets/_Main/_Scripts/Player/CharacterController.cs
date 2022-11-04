@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 public class CharacterController : MonoBehaviourPun
 {
+    [SerializeField] private KeyCode jumpInput;
     private void Start()
     {
         RequestManager.Instance.RPCMaster("RequestConnectPlayer", PhotonNetwork.LocalPlayer);
@@ -12,6 +13,7 @@ public class CharacterController : MonoBehaviourPun
     private void Update()
     {
         Move();
+        Jump();
     }
 
     private void Move()
@@ -26,10 +28,10 @@ public class CharacterController : MonoBehaviourPun
 
     private void Jump()
     {
-        var v = Input.GetAxisRaw("Vertical");
-        if (v != 0)
+        if (Input.GetKeyDown(jumpInput))
         {
             RequestManager.Instance.RPCMaster("RequestJump",PhotonNetwork.LocalPlayer);
         }
     }
+    
 }
