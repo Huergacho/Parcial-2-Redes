@@ -24,22 +24,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public RoomItem roomItemPrefab;
     private List<RoomItem> roomItemsList = new List<RoomItem>();
     public Transform contentObject;
-    public static LobbyManager Instance;
-   
     private bool isInRoom;
     private List<TextMeshProUGUI> _nickNames = new List<TextMeshProUGUI>();
     private float nextTick;
-    private void Awake()
-    {
-        if (Instance == this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
 
     private void Start()
     {
@@ -148,10 +135,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinRoom(roomName);
     }
-
     public void OnClickStart()
     {
-        SceneManager.LoadScene("Game");
+        photonView.RPC(nameof(StartGame),RpcTarget.AllBuffered);
+    }
+    [PunRPC]
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel("Game");
+
     }
 
     public override void OnDisconnected(DisconnectCause cause)

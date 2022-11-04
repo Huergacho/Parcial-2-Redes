@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class RoomItem : MonoBehaviour
 {
   public TextMeshProUGUI roomName;
+  private LobbyManager _manager;
 
   private void Start()
   {
-    
+   _manager = FindObjectOfType<LobbyManager>();
   }
 
   public void SetRoomName(string name)
@@ -19,6 +20,6 @@ public class RoomItem : MonoBehaviour
 
   public void OnClickItem()
   {
-    LobbyManager.Instance.JoinRoom(roomName.text);
+    _manager.JoinRoom(roomName.text);
   }
 }

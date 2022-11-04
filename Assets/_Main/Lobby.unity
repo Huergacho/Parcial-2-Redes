@@ -910,6 +910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 779674678}
   - component: {fileID: 779674679}
+  - component: {fileID: 779674680}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -943,18 +944,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3502eff3bc347bd98ce9e705f63a94b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomInputField: {fileID: 1670337888}
-  lobbyPanel: {fileID: 1938849818}
-  roomPanel: {fileID: 1915360500}
-  roomName: {fileID: 1948395592}
-  roomItemPrefab: {fileID: 8518917953874732101, guid: 232dab852f9044e419027e81690c9272, type: 3}
-  contentObject: {fileID: 1006487028}
   currentPlayerText: {fileID: 1943640565}
   nickNamePrefab: {fileID: 7700595509338093125, guid: de17ecb892ca3754ca2a4d05998b105b, type: 3}
   nickNameContent: {fileID: 1145263633}
   startButton: {fileID: 79083280}
   startButtonText: {fileID: 709978304}
   minPlayers: 2
+  tickCooldown: 1.5
+  roomInputField: {fileID: 1670337888}
+  lobbyPanel: {fileID: 1938849818}
+  roomPanel: {fileID: 1915360500}
+  roomName: {fileID: 1948395592}
+  roomItemPrefab: {fileID: 8518917953874732101, guid: 232dab852f9044e419027e81690c9272, type: 3}
+  contentObject: {fileID: 1006487028}
+--- !u!114 &779674680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779674677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &834951289
 GameObject:
   m_ObjectHideFlags: 0
