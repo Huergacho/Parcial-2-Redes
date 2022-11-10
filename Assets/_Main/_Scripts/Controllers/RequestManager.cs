@@ -76,7 +76,6 @@ public class RequestManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RequestDie(Player client)
     {
-        RemoveModel(FilterPlayer(client));
         FilterPlayer(client).Die();
     }
 

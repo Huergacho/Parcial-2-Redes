@@ -1,33 +1,32 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 
 public class CharacterModel : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private int maxJumps = 1;
-    [SerializeField] private float maxForce;
+    [SerializeField] private ActorStats stats;
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private LayerMask contactLayers;
-    [SerializeField] private float attackForce;
-    [SerializeField] private int damageAmount = 1;
-    private int currentJumps;
-    private Rigidbody rb;
+    private int _currentJumps;
+    private Rigidbody _rb;
     private LifeController _lifeController;
-    [SerializeField]private LayerMask killZoneLayer;
+    private Coroutine _attackCoroutine;
+    private CharacterView _view;
+    private bool canAttack;
+    private bool isMoving;
 
 
     private void Awake()
     {
+        _view = GetComponent<CharacterView>();
         _lifeController = GetComponent<LifeController>();
-        rb = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        currentJumps = 0;
+        _currentJumps = 0;
     }
 
     private void Update()
@@ -35,48 +34,62 @@ public class CharacterModel : MonoBehaviour
         CheckJumps();
         CheckTreshHold();
         CheckRotation();
+        CheckMoveAnim();
     }
 
+    public void CheckMoveAnim()
+    {
+        if (_rb.velocity.x != 0)
+        {
+            isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
+        }
+        _view.MoveAnimation(isMoving);
+
+    }
     public void Move(Vector3 dir)
     {
-        dir *= speed;
+        dir *= stats.Speed;
         dir.z = 0;
-        dir.y = rb.velocity.y;
-        rb.velocity = dir;
+        dir.y = _rb.velocity.y;
+        _rb.velocity = dir;
     }
 
     public void Jump()
     {
-        if (currentJumps == maxJumps)
+        if (_currentJumps == stats.MaxJumps)
         {
             return;
         }
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        currentJumps++;
+        _rb.AddForce(Vector3.up * stats.JumpForce, ForceMode.Impulse);
+        _currentJumps++;
     }
 
     private void CheckTreshHold()
     {
-        if (rb.velocity.y > maxForce)
+        if (_rb.velocity.y > stats.MaxForce)
         {
-            rb.velocity = Vector3.up * maxForce;
+            _rb.velocity = Vector3.up * stats.MaxForce;
         }
     }
 
     private void CheckJumps()
     {
-        if (rb.velocity.y == 0 && currentJumps != 0)
+        if (_rb.velocity.y == 0 && _currentJumps != 0)
         {
-            currentJumps = 0;
+            _currentJumps = 0;
         }
     }
 
     private void CheckRotation()
     {
-        if (rb.velocity.x > 0)
+        if (_rb.velocity.x > 0)
         {
             transform.rotation = Quaternion.identity;
-        }else if (rb.velocity.x < 0)
+        }else if (_rb.velocity.x < 0)
         {
             transform.rotation = Quaternion.Euler(0,180,0); 
         }
@@ -84,38 +97,58 @@ public class CharacterModel : MonoBehaviour
 
     public void Attack()
     {
-       Collider[] contacts  = Physics.OverlapSphere(attackPoint.position, 0.3f, contactLayers);
+        if (_attackCoroutine != null)
+        {
+            return;
+        }
+        _view.AttackAnimation(true);
+        
+        Collider[] contacts  = Physics.OverlapSphere(attackPoint.position, 0.3f, stats.ContactLayers);
+        _attackCoroutine = StartCoroutine(AttackCooldown());
+        if (contacts.Length <= 0)
+        {
+            return;
+        }
+        foreach (var item in contacts)
+        {
+            if (item.gameObject != gameObject)
+            {
+                var itemModel = item.GetComponent<CharacterModel>();
+                itemModel.OnHitAction(stats.DamageAmount);
 
-       if (contacts.Length <= 0)
-       {
-           return;
-       }
-       foreach (var item in contacts)
-       {
-           if (item.gameObject != this.gameObject)
-           {
-               var itemModel = item.GetComponent<CharacterModel>();
-               itemModel.OnHitAction(damageAmount);
-
-           }
-       }
+            }
+        }
     }
     public void Die()
     {
+        RequestManager.Instance.RemoveModel(this);
+        StopAllCoroutines();
         PhotonNetwork.Destroy(gameObject);
     }
 
     public void OnHitAction(int damage)
     {
         _lifeController.TakeDamage(damage);
-        rb.AddForce((Vector3.right + Vector3.up) * attackForce,ForceMode.Impulse);
+        _view.GetHitAnimation(true);
+        _rb.AddForce((Vector3.right + Vector3.up) * stats.AttackForce,ForceMode.Impulse);
+        _view.GetHitAnimation(false);
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (LayerCompare.IsGoInLayerMask(other.gameObject, killZoneLayer))
+        if (LayerCompare.IsGoInLayerMask(other.gameObject, stats.KillZoneLayer))
         {
+            print("SI");
             RequestManager.Instance.RPCMaster("RequestDie",PhotonNetwork.LocalPlayer);
         }
     }
+
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(stats.AttackCooldown);
+        _view.AttackAnimation(false);
+        _attackCoroutine = null;
+    }
+
 }
