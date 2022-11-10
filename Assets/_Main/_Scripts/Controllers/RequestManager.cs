@@ -30,6 +30,10 @@ public class RequestManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RequestConnectPlayer(Player client)
     {
+        if (client == PhotonNetwork.MasterClient)
+        {
+            return;
+        }
         GameObject obj = PhotonNetwork.Instantiate(characterPrefab.name, spawnPoints[client.ActorNumber].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
         _dicChars[client] = character;
@@ -56,6 +60,41 @@ public class RequestManager : MonoBehaviourPunCallbacks
         {
             var character = _dicChars[client];
             character.Jump();
+        }
+    }
+
+    [PunRPC]
+    public void RequestAttack(Player client)
+    {
+        if (_dicChars.ContainsKey(client))
+        {
+            var character = _dicChars[client];
+            character.Attack();
+        }
+    }
+
+    [PunRPC]
+    public void RequestDie(Player client)
+    {
+        RemoveModel(FilterPlayer(client));
+        FilterPlayer(client).Die();
+    }
+
+    public void RequestHit(Player client, int damage)
+    {
+        FilterPlayer(client).OnHitAction(damage);
+    }
+
+    private CharacterModel FilterPlayer(Player client)
+    {
+        if (_dicChars.ContainsKey(client))
+        {
+            var character = _dicChars[client];
+            return character;
+        }
+        else
+        {
+            return null;
         }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)

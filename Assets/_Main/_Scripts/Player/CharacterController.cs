@@ -14,6 +14,7 @@ public class CharacterController : MonoBehaviourPun
     {
         Move();
         Jump();
+        Attack();
     }
 
     private void Move()
@@ -31,6 +32,14 @@ public class CharacterController : MonoBehaviourPun
         if (Input.GetKeyDown(jumpInput))
         {
             RequestManager.Instance.RPCMaster("RequestJump",PhotonNetwork.LocalPlayer);
+        }
+    }
+
+    private void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RequestManager.Instance.RPCMaster("RequestAttack",PhotonNetwork.LocalPlayer);
         }
     }
     
