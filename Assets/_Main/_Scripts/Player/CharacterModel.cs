@@ -27,6 +27,7 @@ public class CharacterModel : MonoBehaviour
     private void Start()
     {
         _currentJumps = 0;
+        _lifeController.OnDie += Die;
     }
 
     private void Update()
@@ -114,33 +115,31 @@ public class CharacterModel : MonoBehaviour
             if (item.gameObject != gameObject)
             {
                 var itemModel = item.GetComponent<CharacterModel>();
-                itemModel.OnHitAction(stats.DamageAmount);
+                itemModel.OnHitAction(stats.DamageAmount,transform.right);
 
             }
         }
     }
     public void Die()
     {
-        RequestManager.Instance.RemoveModel(this);
         StopAllCoroutines();
+        _view.StopAllCoroutines();
+        RequestManager.Instance.RemoveModel(this);
         PhotonNetwork.Destroy(gameObject);
     }
 
-    public void OnHitAction(int damage)
+    public void OnHitAction(int damage, Vector3 dir)
     {
         _lifeController.TakeDamage(damage);
         _view.GetHitAnimation(true);
-        _rb.AddForce((Vector3.right + Vector3.up) * stats.AttackForce,ForceMode.Impulse);
-        _view.GetHitAnimation(false);
-
+        _rb.AddForce((dir + Vector3.up) * stats.AttackForce,ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (LayerCompare.IsGoInLayerMask(other.gameObject, stats.KillZoneLayer))
         {
-            print("SI");
-            RequestManager.Instance.RPCMaster("RequestDie",PhotonNetwork.LocalPlayer);
+           Die();
         }
     }
 
@@ -150,5 +149,6 @@ public class CharacterModel : MonoBehaviour
         _view.AttackAnimation(false);
         _attackCoroutine = null;
     }
+    
 
 }

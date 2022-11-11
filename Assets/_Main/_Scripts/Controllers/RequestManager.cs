@@ -9,7 +9,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
     private static RequestManager _instance;
     Dictionary<Player, CharacterModel> _dicChars = new Dictionary<Player, CharacterModel>();
     Dictionary<CharacterModel, Player> _dicPlayer = new Dictionary<CharacterModel, Player>();
-    [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private GameObject[] characterPrefab;
     [SerializeField] private Transform[] spawnPoints;
     public static RequestManager Instance => _instance;
 
@@ -34,8 +34,11 @@ public class RequestManager : MonoBehaviourPunCallbacks
         {
             return;
         }
-        GameObject obj = PhotonNetwork.Instantiate(characterPrefab.name, spawnPoints[client.ActorNumber].position, Quaternion.identity);
+        print(client.ActorNumber);
+        GameObject obj = PhotonNetwork.Instantiate(characterPrefab[client.ActorNumber -2].name, spawnPoints[client.ActorNumber -2].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
+        // var characterView = obj.GetComponent<CharacterView>();
+        // characterView.ChangeAnimator(PhotonNetwork.LocalPlayer.ActorNumber);
         _dicChars[client] = character;
         _dicPlayer[character] = client;
     }
@@ -46,31 +49,19 @@ public class RequestManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RequestMove(Player client, Vector3 dir)
     {
-        if (_dicChars.ContainsKey(client))
-        {
-            var character = _dicChars[client];
-            character.Move(dir);
-        }
+        FilterPlayer(client).Move(dir);
     }
 
     [PunRPC]
     public void RequestJump(Player client)
     {
-        if (_dicChars.ContainsKey(client))
-        {
-            var character = _dicChars[client];
-            character.Jump();
-        }
+        FilterPlayer(client).Jump();
     }
 
     [PunRPC]
     public void RequestAttack(Player client)
     {
-        if (_dicChars.ContainsKey(client))
-        {
-            var character = _dicChars[client];
-            character.Attack();
-        }
+        FilterPlayer(client).Attack();
     }
 
     [PunRPC]
@@ -79,9 +70,9 @@ public class RequestManager : MonoBehaviourPunCallbacks
         FilterPlayer(client).Die();
     }
 
-    public void RequestHit(Player client, int damage)
+    public void RequestHit(Player client, int damage,Vector3 dir)
     {
-        FilterPlayer(client).OnHitAction(damage);
+        FilterPlayer(client).OnHitAction(damage,dir);
     }
 
     private CharacterModel FilterPlayer(Player client)

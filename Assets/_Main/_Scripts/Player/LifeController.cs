@@ -7,6 +7,8 @@ public class LifeController : MonoBehaviour
 {
     [SerializeField] private int maxLife;
     [ReadOnly,SerializeField] int currentLife;
+    public event Action OnDie;
+    public event Action OnHit;
 
     private void Start()
     {
@@ -17,9 +19,9 @@ public class LifeController : MonoBehaviour
     {
         if (currentLife - damage <= 0)
         {
-            RequestManager.Instance.RPCMaster("RequestDie",PhotonNetwork.LocalPlayer);
+            OnDie?.Invoke();
         }
         currentLife -= damage;
-        RequestManager.Instance.RPCMaster("RequestHit",PhotonNetwork.LocalPlayer,damage);
+        OnHit?.Invoke();
     }
 }

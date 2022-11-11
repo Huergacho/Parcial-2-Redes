@@ -792,8 +792,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080244710}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0804, y: -0.2, z: 0}
-  m_LocalScale: {x: 4.0005226, y: 1, z: 1}
+  m_LocalPosition: {x: 0.0804, y: 0.0658, z: 0}
+  m_LocalScale: {x: 4.0005226, y: 0.3284, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -907,7 +907,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522f6cedac1a8ff49b39a631a82478f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 7329894710533628016, guid: 96e53849635cf5b48b07f23b44899cd7, type: 3}
+  characterPrefab:
+  - {fileID: 7329894710533628016, guid: 96e53849635cf5b48b07f23b44899cd7, type: 3}
+  - {fileID: 7329894710533628016, guid: 099a913526e2a9f42885f1db417a054c, type: 3}
+  - {fileID: 7329894710533628016, guid: 705f382091d8be948a0e83ea2ea8bb5d, type: 3}
+  - {fileID: 7329894710533628016, guid: d030ff1fabd23af4fac57700579dee3b, type: 3}
   spawnPoints:
   - {fileID: 1522227719}
   - {fileID: 118712851}

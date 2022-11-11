@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1193820911090328509, guid: c2ae39aceccc4e94b8ea7ce412020612, type: 3}
+  m_Sprite: {fileID: 6691028219476326333, guid: b4f12a2ddc8ba474fa8f3ce7f602dd33, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 2221825005954882003}
   - component: {fileID: 3573255105879986012}
   m_Layer: 6
-  m_Name: Player
+  m_Name: PlayerAmarillo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -265,7 +265,7 @@ Animator:
   m_GameObject: {fileID: 7329894710533628016}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 168278248c8222741b6f19664ff5979d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 196725fbf9eda1142a23c081bc8fe96f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
