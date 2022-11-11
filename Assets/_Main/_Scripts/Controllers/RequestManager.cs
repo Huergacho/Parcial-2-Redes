@@ -49,31 +49,52 @@ public class RequestManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RequestMove(Player client, Vector3 dir)
     {
+        if (FilterPlayer(client) == null)
+        {
+            return;
+        }
         FilterPlayer(client).Move(dir);
     }
 
     [PunRPC]
     public void RequestJump(Player client)
     {
+        if (FilterPlayer(client) == null)
+        {
+            return;
+        }
         FilterPlayer(client).Jump();
     }
 
     [PunRPC]
     public void RequestAttack(Player client)
     {
+        if (FilterPlayer(client) == null)
+        {
+            return;
+        }
         FilterPlayer(client).Attack();
     }
 
     [PunRPC]
     public void RequestDie(Player client)
     {
+        if (FilterPlayer(client) == null)
+        {
+            return;
+        }
         FilterPlayer(client).Die();
     }
 
     public void RequestHit(Player client, int damage,Vector3 dir)
     {
+        if (FilterPlayer(client) == null)
+        {
+            return;
+        }
         FilterPlayer(client).OnHitAction(damage,dir);
     }
+    
 
     private CharacterModel FilterPlayer(Player client)
     {
