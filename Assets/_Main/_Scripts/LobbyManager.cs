@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -16,7 +17,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI startButtonText;
     [SerializeField] private int minPlayers;
     [SerializeField] private float tickCooldown = 1.5f;
-   
+    [SerializeField] public TMP_Dropdown playerNumber;
+    [SerializeField] private List<String> _numberPlayerOptions;
     public TMP_InputField roomInputField;
     public GameObject lobbyPanel;
     public GameObject roomPanel;
@@ -27,16 +29,27 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private bool isInRoom;
     private List<TextMeshProUGUI> _nickNames = new List<TextMeshProUGUI>();
     private float nextTick;
+    
+    
 
     private void Start()
     {
-        lobbyPanel.SetActive(true);
-        roomPanel.SetActive(false);
+        
         PhotonNetwork.JoinLobby();
         if (!PhotonNetwork.IsMasterClient)
         {
+            
+            playerNumber.AddOptions(_numberPlayerOptions);
+            lobbyPanel.SetActive(true);
+            roomPanel.SetActive(false);
+            roomInputField.interactable = false;
             startButton.interactable = false;
             startButtonText.text = "Waiting players to connect...";
+        }
+        else
+        {
+            lobbyPanel.SetActive(false);
+            roomPanel.SetActive(true);   
         }
     }
 
@@ -54,7 +67,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             if (!PhotonNetwork.IsMasterClient)
             {
-                startButtonText.text = "Waiting to host...";
+                startButtonText.text = "Waiting host to start...";
                 return;
             }
 
@@ -66,7 +79,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (roomName.text.Length >= 1)
         {
-            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = 4 });
+            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = (byte)minPlayers });
         }
     }
 
@@ -191,8 +204,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinLobby();
     }
-    
 
+    public void SetMaxNumberChange(int i)
+    {
+        minPlayers = i+2;
+        print("cambie a " + minPlayers);
+        print("Me vino " + i);
+    }
+    
     public void OnClickToLeave()
     {
         PhotonNetwork.LeaveRoom();
