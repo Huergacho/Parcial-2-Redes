@@ -1492,7 +1492,7 @@ MonoBehaviour:
   nickNameContent: {fileID: 1145263633}
   startButton: {fileID: 79083280}
   startButtonText: {fileID: 709978304}
-  minPlayers: 2
+  maxPlayers: 0
   tickCooldown: 1.5
   playerNumber: {fileID: 1464291635}
   numberPlayerOptions:

@@ -13,21 +13,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private Transform nickNameContent;
     [SerializeField] private Button startButton;
     [SerializeField] private TextMeshProUGUI startButtonText;
-    [SerializeField] private int minPlayers;
+    [SerializeField] private int maxPlayers;
     [SerializeField] private float tickCooldown = 1.5f;
     [SerializeField] public TMP_Dropdown playerNumber;
-    [SerializeField] private List<String> numberPlayerOptions;
+    [SerializeField] private List<String> numberPlayerOptions = new List<string>(){"2","3","4"};
      public GameObject lobbyPanel;
     public GameObject roomPanel;
     public TextMeshProUGUI roomName;
-    private bool isInRoom;
+    private bool _isInRoom;
     private List<TextMeshProUGUI> _nickNames = new List<TextMeshProUGUI>();
-    private float nextTick;
+    private float _nextTick;
 
 
     private void Awake()
     {
-        roomName.text = "Master room";
+        roomName.text = "Master Room";
     }
 
     private void Start()
@@ -37,23 +37,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             lobbyPanel.SetActive(true);
             roomPanel.SetActive(false);
-            print(roomName.text);
-            
+         
             playerNumber.AddOptions(numberPlayerOptions);
             PhotonNetwork.LocalPlayer.NickName = "Host";
             startButton.interactable = false;
             startButtonText.text = "Waiting players to connect...";
+            return;
         }
-        else
-        {
-            print("No soy el host jeje");
-            PhotonNetwork.JoinRoom(roomName.text);
-        }
+
+        print("No soy el host");
+        PhotonNetwork.JoinRoom(roomName.text);
     }
 
     private void Update()
     {
-        if (isInRoom)
+        if (_isInRoom)
         {
             CheckForAllPlayersToJoin();
         }
@@ -61,7 +59,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void CheckForAllPlayersToJoin()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayers)
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= maxPlayers)
         {
             if (!PhotonNetwork.IsMasterClient)
             {
@@ -75,21 +73,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public void OnClickCreate()
     {
-        if (roomName.text.Length >= 1)
-        {
-            PhotonNetwork.CreateRoom(roomName.text, new RoomOptions() { MaxPlayers = (byte)minPlayers });
-        }
-        lobbyPanel.SetActive(false);
-        roomPanel.SetActive(true);
+         PhotonNetwork.CreateRoom(roomName.text, new RoomOptions() { MaxPlayers = (byte)maxPlayers });
     }
 
     public override void OnJoinedRoom()
     {
         lobbyPanel.SetActive(false);
         roomPanel.SetActive(true);
-        isInRoom = true;
+        _isInRoom = true;
         roomName.text = "Room name: " + PhotonNetwork.CurrentRoom.Name;
-        currentPlayerText.text = "CurrentPlayer" + (PhotonNetwork.CurrentRoom.PlayerCount-1) + "/" +
+        currentPlayerText.text = "CurrentPlayer :" + (PhotonNetwork.CurrentRoom.PlayerCount-1) + "/" +
                                  PhotonNetwork.CurrentRoom.MaxPlayers;
         InstanceNickNames();
 
@@ -112,8 +105,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        currentPlayerText.text = "CurrentPlayer" + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                                 PhotonNetwork.CurrentRoom.MaxPlayers;
+        currentPlayerText.text = "CurrentPlayer :" + (PhotonNetwork.CurrentRoom.PlayerCount-1) + "/" +
+                                PhotonNetwork.CurrentRoom.MaxPlayers;
         UpdatePlayersWhenJoin(newPlayer);
     }
 
@@ -134,7 +127,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        isInRoom = false;
+        _isInRoom = false;
         ClearPlayers();
     }
 
@@ -175,7 +168,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void SetMaxNumberChange(int i)
     {
-        minPlayers = i+2;
+        maxPlayers = i+2;
     }
     
     public void OnClickToLeave()
