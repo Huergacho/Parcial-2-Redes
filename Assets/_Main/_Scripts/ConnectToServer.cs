@@ -14,12 +14,38 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
 
     public void OnClickConnect()
     {
+            status.text = "Connecting...";
+            PhotonNetwork.ConnectUsingSettings();
+    }
+
+    public void OnClickClient()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void OnGoToCurrentRooms()
+    {
+        if (CheckForNickNameLenght())
+        {
+            SceneManager.LoadScene("Room Selector");
+        }
+    }
+    public bool CheckForNickNameLenght()
+    {
         if (userNameInput.text.Length >= 1)
         {
             PhotonNetwork.NickName = userNameInput.text;
-            status.text = "Connecting...";
-            PhotonNetwork.ConnectUsingSettings();
+            return true;
         }
+
+        return false;
+    }
+
+    public void OnClickHost()
+    {  
+
+        SceneManager.LoadScene("Room Creator");
+
     }
 
     public override void OnConnectedToMaster()
@@ -27,7 +53,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
         // button.interactable = false;
         // PhotonNetwork.JoinLobby();
         // status.text = "Connecting To Lobby";
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadScene("Selector");
     }
 
     // public override void OnDisconnected(DisconnectCause cause)

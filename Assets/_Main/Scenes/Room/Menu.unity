@@ -384,8 +384,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userNameInput: {fileID: 607402915}
-  status: {fileID: 531823718}
-  button: {fileID: 1796290522}
+  status: {fileID: 0}
+  button: {fileID: 0}
 --- !u!1 &607402913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,7 +1323,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 587729750}
         m_TargetAssemblyTypeName: ConnectToServer, Assembly-CSharp
-        m_MethodName: OnClickConnect
+        m_MethodName: OnGoToCurrentRooms
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
