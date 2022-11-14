@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
@@ -18,38 +16,38 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private int minPlayers;
     [SerializeField] private float tickCooldown = 1.5f;
     [SerializeField] public TMP_Dropdown playerNumber;
-    [SerializeField] private List<String> _numberPlayerOptions;
-    public TMP_InputField roomInputField;
-    public GameObject lobbyPanel;
+    [SerializeField] private List<String> numberPlayerOptions;
+     public GameObject lobbyPanel;
     public GameObject roomPanel;
     public TextMeshProUGUI roomName;
-    public RoomItem roomItemPrefab;
-    private List<RoomItem> roomItemsList = new List<RoomItem>();
-    public Transform contentObject;
     private bool isInRoom;
     private List<TextMeshProUGUI> _nickNames = new List<TextMeshProUGUI>();
     private float nextTick;
-    
-    
+
+
+    private void Awake()
+    {
+        roomName.text = "Master room";
+    }
 
     private void Start()
     {
-        
         PhotonNetwork.JoinLobby();
-        if (!PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.CountOfPlayers == 1)
         {
-            
-            playerNumber.AddOptions(_numberPlayerOptions);
             lobbyPanel.SetActive(true);
             roomPanel.SetActive(false);
-            roomInputField.interactable = false;
+            print(roomName.text);
+            
+            playerNumber.AddOptions(numberPlayerOptions);
+            PhotonNetwork.LocalPlayer.NickName = "Host";
             startButton.interactable = false;
             startButtonText.text = "Waiting players to connect...";
         }
         else
         {
-            lobbyPanel.SetActive(false);
-            roomPanel.SetActive(true);   
+            print("No soy el host jeje");
+            PhotonNetwork.JoinRoom(roomName.text);
         }
     }
 
@@ -79,8 +77,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (roomName.text.Length >= 1)
         {
-            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = (byte)minPlayers });
+            PhotonNetwork.CreateRoom(roomName.text, new RoomOptions() { MaxPlayers = (byte)minPlayers });
         }
+        lobbyPanel.SetActive(false);
+        roomPanel.SetActive(true);
     }
 
     public override void OnJoinedRoom()
@@ -89,7 +89,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomPanel.SetActive(true);
         isInRoom = true;
         roomName.text = "Room name: " + PhotonNetwork.CurrentRoom.Name;
-        currentPlayerText.text = "CurrentPlayer" + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
+        currentPlayerText.text = "CurrentPlayer" + (PhotonNetwork.CurrentRoom.PlayerCount-1) + "/" +
                                  PhotonNetwork.CurrentRoom.MaxPlayers;
         InstanceNickNames();
 
@@ -104,39 +104,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             _nickNames.Add(newNick);
         }
     }
-
-    public override void OnRoomListUpdate(List<RoomInfo> roomInfo)
-    {
-        if (Time.time >= nextTick)
-        {
-            UpdateRoomList(roomInfo);
-            nextTick = tickCooldown;
-        }
-    }
-
-    void UpdateRoomList(List<RoomInfo> list)
-    {
-        for (int i = 0; i < roomItemsList.Count; i++)
-        {
-            var index = roomItemsList[i];
-            Destroy(index.gameObject);
-        }
-        roomItemsList.Clear();
-        foreach (var room in list)
-        {
-            RoomItem newRoom = Instantiate(roomItemPrefab, contentObject);
-            newRoom.SetRoomName(room.Name);
-            roomItemsList.Add(newRoom);
-        }
-    }
-
     public void UpdatePlayersWhenJoin(Player player)
     {
         var newNick = Instantiate(nickNamePrefab, nickNameContent);
         newNick.text = player.NickName;
         _nickNames.Add(newNick);
     }
-
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         currentPlayerText.text = "CurrentPlayer" + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
@@ -144,10 +117,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         UpdatePlayersWhenJoin(newPlayer);
     }
 
-    public void JoinRoom(string roomName)
-    {
-        PhotonNetwork.JoinRoom(roomName);
-    }
     public void OnClickStart()
     {
         photonView.RPC(nameof(StartGame),RpcTarget.AllBuffered);
@@ -156,7 +125,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         PhotonNetwork.LoadLevel("Game");
-
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -208,8 +176,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void SetMaxNumberChange(int i)
     {
         minPlayers = i+2;
-        print("cambie a " + minPlayers);
-        print("Me vino " + i);
     }
     
     public void OnClickToLeave()
