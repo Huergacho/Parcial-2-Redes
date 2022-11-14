@@ -15,6 +15,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button startButton;
     [SerializeField] private TextMeshProUGUI startButtonText;
     [SerializeField] private int minPlayers;
+    [SerializeField] private int maxPlayers;
     [SerializeField] private float tickCooldown = 1.5f;
    
     public TMP_InputField roomInputField;
@@ -27,11 +28,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private bool isInRoom;
     private List<TextMeshProUGUI> _nickNames = new List<TextMeshProUGUI>();
     private float nextTick;
-
+    [SerializeField] public TMP_Dropdown playerNumber;
+    [SerializeField] private List<String> numberPlayerOptions = new List<string>(){"2","3","4"};
     private void Start()
     {
         lobbyPanel.SetActive(true);
         roomPanel.SetActive(false);
+        maxPlayers = minPlayers;
+        if (playerNumber != null)
+        {
+            playerNumber.AddOptions(numberPlayerOptions);
+        }
         PhotonNetwork.JoinLobby();
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -66,7 +73,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (roomName.text.Length >= 1)
         {
-            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = 4 });
+            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = (byte)maxPlayers });
         }
     }
 
@@ -76,8 +83,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomPanel.SetActive(true);
         isInRoom = true;
         roomName.text = "Room name: " + PhotonNetwork.CurrentRoom.Name;
-        currentPlayerText.text = "CurrentPlayer" + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                                 PhotonNetwork.CurrentRoom.MaxPlayers;
+        currentPlayerText.text = MaxPlayersText();
         InstanceNickNames();
 
     }
@@ -126,11 +132,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        currentPlayerText.text = "CurrentPlayer" + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
-                                 PhotonNetwork.CurrentRoom.MaxPlayers;
+        currentPlayerText.text = MaxPlayersText();
         UpdatePlayersWhenJoin(newPlayer);
     }
 
+    private String MaxPlayersText()
+    {
+      return  "CurrentPlayer " + (PhotonNetwork.CurrentRoom.PlayerCount -1) + "/" +
+            PhotonNetwork.CurrentRoom.MaxPlayers;
+    }
     public void JoinRoom(string roomName)
     {
         PhotonNetwork.JoinRoom(roomName);
@@ -192,7 +202,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
     
-
+    public void SetMaxNumberChange(int i)
+    {    
+        maxPlayers = i+minPlayers;
+    }
     public void OnClickToLeave()
     {
         PhotonNetwork.LeaveRoom();
