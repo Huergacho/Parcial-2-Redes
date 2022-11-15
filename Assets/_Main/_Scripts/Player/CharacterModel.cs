@@ -23,6 +23,7 @@ public class CharacterModel : MonoBehaviour
         _view = GetComponentInChildren<CharacterView>();
         _lifeController = GetComponent<LifeController>();
         _rb = GetComponent<Rigidbody>();
+        _lifeController.AssignMaxLife(stats.MaxLife);
     }
 
     private void Initialize()

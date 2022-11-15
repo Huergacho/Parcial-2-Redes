@@ -19,9 +19,10 @@ MonoBehaviour:
   damageAmount: 50
   attackCooldown: 0.5
   speed: 3
-  jumpForce: 8
+  jumpForce: 8.85
   maxJumps: 1
-  maxForce: 10
+  maxForce: 2
   killZoneLayer:
     serializedVersion: 2
     m_Bits: 128
+  maxLife: 0

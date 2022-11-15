@@ -19,16 +19,21 @@ public class ActorStats : ScriptableObject
     [Header("Movement")]
     [SerializeField] private float speed;
     public float Speed => speed;
-    
+    [Range(5,20)]
     [SerializeField] private float jumpForce;
     public float JumpForce => jumpForce;
     
     [SerializeField] private int maxJumps = 1;
     public int MaxJumps => maxJumps;
     
+    [Range(0,10)]
     [SerializeField] private float maxForce;
-    public float MaxForce => maxForce;
+    public float MaxForce => jumpForce + maxForce;
+    [Header("Life Related")]
     
     [SerializeField]private LayerMask killZoneLayer;
     public LayerMask KillZoneLayer => killZoneLayer;
+
+    [SerializeField] private int maxLife;
+    public int MaxLife => maxLife;
 }
