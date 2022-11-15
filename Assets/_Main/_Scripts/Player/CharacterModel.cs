@@ -40,6 +40,7 @@ public class CharacterModel : MonoBehaviour
             CheckJumps();
             CheckTreshHold();
             CheckMoveAnim();
+            CheckRotation();
         }
         CheckRotation();
     }

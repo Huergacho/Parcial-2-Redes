@@ -9,9 +9,9 @@ public class LifeController : MonoBehaviour
     [ReadOnly,SerializeField] int currentLife;
     public event Action OnDie;
     public event Action OnHit;
-
-    private void Start()
+    public void AssignMaxLife(int value)
     {
+        maxLife = value;
         currentLife = maxLife;
     }
 
