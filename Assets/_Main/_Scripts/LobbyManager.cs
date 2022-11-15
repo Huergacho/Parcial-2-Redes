@@ -57,7 +57,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void CheckForAllPlayersToJoin()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayers +1 ||PhotonNetwork.CurrentRoom.PlayerCount >= minPlayers +1 )
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayers +1)
         {
             if (!PhotonNetwork.IsMasterClient)
             {
@@ -139,7 +139,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private String MaxPlayersText()
     {
       return  "CurrentPlayer " + (PhotonNetwork.CurrentRoom.PlayerCount -1) + "/" +
-            PhotonNetwork.CurrentRoom.MaxPlayers;
+            maxPlayers;
     }
     public void JoinRoom(string roomName)
     {
