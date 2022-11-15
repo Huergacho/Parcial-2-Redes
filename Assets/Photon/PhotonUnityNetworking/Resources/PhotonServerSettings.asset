@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: sa
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -38,26 +38,14 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - Dead
-  - RequestConnectPlayer
-  - RequestMove
-  - RequestName
-  - UpdateName
-  - StartGame
-  - RequestJump
-  - RequestAttack
-  - RequestDie
-<<<<<<< Updated upstream
-  - PlayerDie
-  - CheckForWinner
-  - RequestWinner
-  - WinScreen
-=======
-  - GetMessage
   - GetChatMessage
-  - RequestChat
->>>>>>> Stashed changes
+  - RequestAttack
+  - RequestConnectPlayer
+  - RequestJump
+  - RequestMove
+  - RespawnSpaceship
+  - StartGame
+  - WinScreen
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0

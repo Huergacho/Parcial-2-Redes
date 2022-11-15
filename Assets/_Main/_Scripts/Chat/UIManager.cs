@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
+            print("Blah");
             chatPanel.SetActive(false);
         }   
 
@@ -18,6 +19,7 @@ public class UIManager : MonoBehaviourPun
 
     public void SetActiveChat()
     {
+        if(!photonView.IsMine) return;
         chatPanel.SetActive(true);
     }
 
