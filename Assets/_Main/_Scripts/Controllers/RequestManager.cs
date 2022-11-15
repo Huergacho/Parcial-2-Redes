@@ -38,7 +38,6 @@ public class RequestManager : MonoBehaviourPunCallbacks
         {
             return;
         }
-        print(client.ActorNumber);
         GameObject obj = PhotonNetwork.Instantiate(characterPrefab[client.ActorNumber -2].name, spawnPoints[client.ActorNumber -2].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
         character.AssignStats(spawnPoints[client.ActorNumber -2]);
@@ -76,6 +75,18 @@ public class RequestManager : MonoBehaviourPunCallbacks
         if (_dicChars.ContainsKey(client))
         {
             var character = _dicChars[client];
+            return character;
+        }
+        else
+        {
+            return null;
+        }
+    }    
+    private Player FilterClient(CharacterModel client)
+    {
+        if (_dicPlayer.ContainsKey(client))
+        {
+            var character = _dicPlayer[client];
             return character;
         }
         else
@@ -154,6 +165,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
     public void PlayerDie()
     {
         playersAlive--;
+        //winHud.photonView.RPC(nameof(winHud.ShowChat),FilterClient(model),true);
         if (playersAlive == 1)
         {
             CheckForWinner();
@@ -167,15 +179,9 @@ public class RequestManager : MonoBehaviourPunCallbacks
         {
             if (!model.IsDead && PhotonNetwork.IsMasterClient)
             {
-                currentWinHud = PhotonNetwork.Instantiate(winHud.gameObject.name, Vector3.zero, Quaternion.identity);
-                var hud = currentWinHud.GetComponent<HudManager>();
-                hud.photonView.RPC(nameof(hud.WinScreen),RpcTarget.All,GetClientFromModel(model).NickName);
+                winHud.photonView.RPC(nameof(winHud.WinScreen),RpcTarget.All,GetClientFromModel(model).NickName,true);
                 break;
-            }else if (!PhotonNetwork.IsMasterClient)
-            {
-
-                
-            } 
+            }
         }
     }
     // public void RequestWinner()
@@ -201,7 +207,8 @@ public class RequestManager : MonoBehaviourPunCallbacks
     private void RestartGame()
     {
         StopCoroutine(RestartGameRoutine());
-        PhotonNetwork.Destroy(currentWinHud);
+        winHud.ShowChat(false);
+        winHud.photonView.RPC(nameof(winHud.WinScreen),RpcTarget.All,"",false);
         playersAlive = 0;
         foreach (var model in GetAllModels())
         {

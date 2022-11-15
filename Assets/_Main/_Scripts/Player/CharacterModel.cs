@@ -104,15 +104,15 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = false;
         _view.DieAnimation(true);
         RequestManager.Instance.PlayerDie();
-        Chat();
+        Chat(true);
     }
 
-    public void Chat()
+    public void Chat(bool status)
     {
-        UIManager chat = FindObjectOfType<UIManager>();
+        HudManager chat = FindObjectOfType<HudManager>();
         if (chat!=null)
         {
-            chat.SetActiveChat();
+            chat.ShowChat(status);
         }
     }
     public void Respawn()
@@ -125,6 +125,7 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = true;
         _rb.isKinematic = false;
         _isDead = false;
+        Chat(false);
     }
 
 

@@ -341,7 +341,6 @@ GameObject:
   - component: {fileID: 4350597112530489543}
   - component: {fileID: 4350597112530489540}
   - component: {fileID: 4350597112530489536}
-  - component: {fileID: 261373822592158236}
   m_Layer: 5
   m_Name: Hud
   m_TagString: Untagged
@@ -452,17 +451,3 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &261373822592158236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4350597112530489541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474e801cf3f442409d408cf2f47cf7c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  winnerTextContainer: {fileID: 4350597112473027500}
-  winnerText: {fileID: 4350597110967748876}
