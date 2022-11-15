@@ -22,7 +22,11 @@ public class HudManager : MonoBehaviourPun
     }
     public void ShowChat(bool status)
     {
-        chat.SetActive(status);
+        if (photonView.IsMine)
+        {
+            chat.SetActive(status);
+        }
+        
     }
     
 }
