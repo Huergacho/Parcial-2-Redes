@@ -3,60 +3,60 @@ using System.Collections;
 using System.Linq;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CharacterModel : MonoBehaviour
 {
-    [SerializeField] private ActorStats stats;
     [SerializeField] private Transform attackPoint;
+    private Transform _spawnPoint;
+    [SerializeField ]private ActorStats stats;
     private int _currentJumps;
     private Rigidbody _rb;
     private LifeController _lifeController;
     private Coroutine _attackCoroutine;
     private CharacterView _view;
-    private bool canAttack;
-    private bool isMoving;
-
-
+    private bool _isMoving;
+    private bool _isDead = false;
     private void Awake()
     {
-        _view = GetComponent<CharacterView>();
+        _view = GetComponentInChildren<CharacterView>();
         _lifeController = GetComponent<LifeController>();
         _rb = GetComponent<Rigidbody>();
     }
 
-    private void Start()
+    private void Initialize()
     {
+        transform.position = _spawnPoint.position;
         _currentJumps = 0;
         _lifeController.OnDie += Die;
     }
 
     private void Update()
     {
-        CheckJumps();
-        CheckTreshHold();
+        if (!_isDead)
+        {
+            CheckJumps();
+            CheckTreshHold();
+            CheckMoveAnim();
+        }
         CheckRotation();
-        CheckMoveAnim();
     }
 
-    public void CheckMoveAnim()
+    #region Actions
+
+    public void Move(Vector3 dir)
     {
-        if (_rb.velocity.x != 0)
+        if (!_isDead)
         {
-            isMoving = true;
+            dir *= stats.Speed;
+            dir.z = 0;
+            dir.y = _rb.velocity.y;
+            _rb.velocity = dir;
         }
         else
         {
-            isMoving = false;
+            transform.position += dir * stats.Speed * Time.deltaTime;
         }
-        _view.MoveAnimation(isMoving);
-
-    }
-    public void Move(Vector3 dir)
-    {
-        dir *= stats.Speed;
-        dir.z = 0;
-        dir.y = _rb.velocity.y;
-        _rb.velocity = dir;
     }
 
     public void Jump()
@@ -67,33 +67,6 @@ public class CharacterModel : MonoBehaviour
         }
         _rb.AddForce(Vector3.up * stats.JumpForce, ForceMode.Impulse);
         _currentJumps++;
-    }
-
-    private void CheckTreshHold()
-    {
-        if (_rb.velocity.y > stats.MaxForce)
-        {
-            _rb.velocity = Vector3.up * stats.MaxForce;
-        }
-    }
-
-    private void CheckJumps()
-    {
-        if (_rb.velocity.y == 0 && _currentJumps != 0)
-        {
-            _currentJumps = 0;
-        }
-    }
-
-    private void CheckRotation()
-    {
-        if (_rb.velocity.x > 0)
-        {
-            transform.rotation = Quaternion.identity;
-        }else if (_rb.velocity.x < 0)
-        {
-            transform.rotation = Quaternion.Euler(0,180,0); 
-        }
     }
 
     public void Attack()
@@ -122,15 +95,71 @@ public class CharacterModel : MonoBehaviour
     }
     public void Die()
     {
+        _isDead = true;
         StopAllCoroutines();
         _view.StopAllCoroutines();
-        RequestManager.Instance.RemoveModel(this);
-        PhotonNetwork.Destroy(gameObject);
+        _rb.detectCollisions = false;
+        _rb.isKinematic = true;
+        _rb.useGravity = false;
+        _view.DieAnimation(true);
+    }
+    private void Respawn()
+    {
+        _lifeController.Reset();
+        transform.position = _spawnPoint.position;
+        _currentJumps = 0;
+        _rb.detectCollisions = true;
+        _rb.useGravity = true;
+        _rb.isKinematic = false;
+        _isDead = false;
+        _view.DieAnimation(false);
+
+    }
+
+
+    #endregion
+    #region Checks
+    public void CheckMoveAnim()
+    {
+        if (_rb.velocity.x != 0)
+        {
+            _isMoving = true;
+        }
+        else
+        {
+            _isMoving = false;
+        }
+        _view.MoveAnimation(_isMoving);
+
+    }
+    private void CheckTreshHold()
+    {
+        if (_rb.velocity.y > stats.MaxForce)
+        {
+            _rb.velocity = Vector3.up * stats.MaxForce;
+        }
+    }
+    private void CheckJumps()
+    {
+        if (_rb.velocity.y == 0 && _currentJumps != 0)
+        {
+            _currentJumps = 0;
+        }
+    }
+    private void CheckRotation()
+    {
+        if (_rb.velocity.x > 0)
+        {
+            transform.rotation = Quaternion.identity;
+        }else if (_rb.velocity.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0,180,0); 
+        }
     }
 
     public void OnHitAction(int damage, Vector3 dir)
     {
-        _lifeController.TakeDamage(damage);
+        _lifeController.TakeDamage(-damage);
         _view.GetHitAnimation(true);
         _rb.AddForce((dir + Vector3.up) * stats.AttackForce,ForceMode.Impulse);
     }
@@ -139,7 +168,7 @@ public class CharacterModel : MonoBehaviour
     {
         if (LayerCompare.IsGoInLayerMask(other.gameObject, stats.KillZoneLayer))
         {
-           Die();
+            Die();
         }
     }
 
@@ -148,6 +177,16 @@ public class CharacterModel : MonoBehaviour
         yield return new WaitForSeconds(stats.AttackCooldown);
         _view.AttackAnimation(false);
         _attackCoroutine = null;
+    }
+    
+
+    #endregion
+
+
+    public void AssignStats(Transform spawnPoint)
+    {
+        _spawnPoint = spawnPoint;
+        Initialize();
     }
     
 

@@ -14,9 +14,9 @@ public class CharacterView : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
-    
     public void AttackAnimation(bool state)
     {
+        print("Ataco");
         _animator.SetBool("IsAttacking",state);
     }
 
@@ -27,14 +27,12 @@ public class CharacterView : MonoBehaviour
 
     public void GetHitAnimation(bool state)
     {
-        print("Empiezo la de hit");
         _animator.SetBool("IsGettingHit",state);
         if (_getHitCoroutine == null)
         {
             _getHitCoroutine = StartCoroutine(ResetAnimation());
         }
     }
-
     public IEnumerator ResetAnimation()
     {
         yield return new WaitForSeconds(_animator.GetCurrentAnimatorClipInfo(0).Length);
@@ -42,4 +40,9 @@ public class CharacterView : MonoBehaviour
         _getHitCoroutine = null;
     }
 
+    public void DieAnimation(bool state)
+    {
+        _animator.SetBool("IsDead",true);
+    }
+    
 }

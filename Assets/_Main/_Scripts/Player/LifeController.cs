@@ -15,13 +15,18 @@ public class LifeController : MonoBehaviour
         currentLife = maxLife;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int stat)
     {
-        if (currentLife - damage <= 0)
+        if (currentLife + stat <= 0)
         {
             OnDie?.Invoke();
         }
-        currentLife -= damage;
+        currentLife -= stat;
         OnHit?.Invoke();
+    }
+
+    public void Reset()
+    {
+        currentLife = maxLife;
     }
 }

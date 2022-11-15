@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3439309575131835940}
   - component: {fileID: 7390198109755278537}
+  - component: {fileID: 2929048100297835864}
+  - component: {fileID: 3295817075847667538}
+  - component: {fileID: 4087162015003741973}
   m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
@@ -68,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2052899895
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 6257046027232108077, guid: 0767143a70e5d2542b235fd8d206a14a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -82,6 +85,64 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &2929048100297835864
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353214759313125221}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 168278248c8222741b6f19664ff5979d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3295817075847667538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353214759313125221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8496359db3846ceb198374f8ceb8595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4087162015003741973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353214759313125221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsAttacking
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsGettingHit
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsMoving
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &7329894710533628016
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,9 +159,6 @@ GameObject:
   - component: {fileID: 5199991804923728674}
   - component: {fileID: 8257692709682881910}
   - component: {fileID: 8397021551329785407}
-  - component: {fileID: 8782635642068179945}
-  - component: {fileID: 2221825005954882003}
-  - component: {fileID: 3573255105879986012}
   m_Layer: 6
   m_Name: PlayerRojo
   m_TagString: Untagged
@@ -136,8 +194,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65f7c1644fc49b882a75fde0ed9153f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 9b25e456b89436645a5a4265cef2d8d3, type: 2}
   attackPoint: {fileID: 1373497041657073932}
+  stats: {fileID: 11400000, guid: 9b25e456b89436645a5a4265cef2d8d3, type: 2}
 --- !u!54 &4192876962725168318
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -175,7 +233,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 1432280414672312229}
   - {fileID: 5199991804923728674}
-  - {fileID: 3573255105879986012}
+  - {fileID: 4087162015003741973}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -255,64 +313,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLife: 100
   currentLife: 0
---- !u!95 &8782635642068179945
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7329894710533628016}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 70c82b89618d7d8488219a6c94204e47, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2221825005954882003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7329894710533628016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8496359db3846ceb198374f8ceb8595, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3573255105879986012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7329894710533628016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: IsAttacking
-  - Type: 4
-    SynchronizeType: 2
-    Name: IsGettingHit
-  - Type: 4
-    SynchronizeType: 2
-    Name: IsMoving
-  m_SynchronizeLayers:
-  - SynchronizeType: 0
-    LayerIndex: 0
 --- !u!1 &9222747788562596917
 GameObject:
   m_ObjectHideFlags: 0

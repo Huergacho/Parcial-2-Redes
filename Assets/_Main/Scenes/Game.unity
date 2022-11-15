@@ -917,6 +917,7 @@ MonoBehaviour:
   - {fileID: 118712851}
   - {fileID: 813472298}
   - {fileID: 2017079161}
+  charStats: {fileID: 11400000, guid: 9b25e456b89436645a5a4265cef2d8d3, type: 2}
 --- !u!114 &1524750708
 MonoBehaviour:
   m_ObjectHideFlags: 0

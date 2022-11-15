@@ -37,8 +37,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
         print(client.ActorNumber);
         GameObject obj = PhotonNetwork.Instantiate(characterPrefab[client.ActorNumber -2].name, spawnPoints[client.ActorNumber -2].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
-        // var characterView = obj.GetComponent<CharacterView>();
-        // characterView.ChangeAnimator(PhotonNetwork.LocalPlayer.ActorNumber);
+        character.AssignStats(spawnPoints[client.ActorNumber -2]);
         _dicChars[client] = character;
         _dicPlayer[character] = client;
     }

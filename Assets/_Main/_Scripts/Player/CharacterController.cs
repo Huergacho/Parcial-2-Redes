@@ -6,6 +6,15 @@ using Photon.Pun;
 public class CharacterController : MonoBehaviourPun
 {
     [SerializeField] private KeyCode jumpInput;
+
+    private void Awake()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Destroy(this);
+        }
+    }
+
     private void Start()
     {
         RequestManager.Instance.RPCMaster("RequestConnectPlayer", PhotonNetwork.LocalPlayer);
@@ -20,7 +29,8 @@ public class CharacterController : MonoBehaviourPun
     private void Move()
     {
         var h = Input.GetAxisRaw("Horizontal");
-        Vector3 dir = new Vector3(h, 0, 0).normalized;
+        var v = Input.GetAxisRaw("Vertical");
+        Vector3 dir = new Vector3(h, v, 0).normalized;
         if (dir != Vector3.zero)
         {
             RequestManager.Instance.RPCMaster("RequestMove", PhotonNetwork.LocalPlayer, dir);
