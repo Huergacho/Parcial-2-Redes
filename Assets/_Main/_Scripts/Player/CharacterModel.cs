@@ -17,6 +17,7 @@ public class CharacterModel : MonoBehaviour
     private CharacterView _view;
     private bool _isMoving;
     private bool _isDead = false;
+    public bool IsDead => _isDead;
     private void Awake()
     {
         _view = GetComponentInChildren<CharacterView>();
@@ -71,14 +72,12 @@ public class CharacterModel : MonoBehaviour
 
     public void Attack()
     {
-        if (_attackCoroutine != null)
+        if (_attackCoroutine != null || _isDead)
         {
             return;
         }
-        _view.AttackAnimation(true);
-        
+        _view.AttackAnimation(true,stats.AttackCooldown);
         Collider[] contacts  = Physics.OverlapSphere(attackPoint.position, 0.3f, stats.ContactLayers);
-        _attackCoroutine = StartCoroutine(AttackCooldown());
         if (contacts.Length <= 0)
         {
             return;
@@ -102,9 +101,11 @@ public class CharacterModel : MonoBehaviour
         _rb.isKinematic = true;
         _rb.useGravity = false;
         _view.DieAnimation(true);
+        RequestManager.Instance.PlayerDie();
     }
-    private void Respawn()
+    public void Respawn()
     {
+        _view.DieAnimation(false);
         _lifeController.Reset();
         transform.position = _spawnPoint.position;
         _currentJumps = 0;
@@ -112,8 +113,6 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = true;
         _rb.isKinematic = false;
         _isDead = false;
-        _view.DieAnimation(false);
-
     }
 
 
@@ -148,7 +147,7 @@ public class CharacterModel : MonoBehaviour
     }
     private void CheckRotation()
     {
-        if (_rb.velocity.x > 0)
+        if (_rb.velocity.x >= 0)
         {
             transform.rotation = Quaternion.identity;
         }else if (_rb.velocity.x < 0)
@@ -171,15 +170,6 @@ public class CharacterModel : MonoBehaviour
             Die();
         }
     }
-
-    private IEnumerator AttackCooldown()
-    {
-        yield return new WaitForSeconds(stats.AttackCooldown);
-        _view.AttackAnimation(false);
-        _attackCoroutine = null;
-    }
-    
-
     #endregion
 
 

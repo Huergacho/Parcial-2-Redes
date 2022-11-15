@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.Serialization;
 
 public class RequestManager : MonoBehaviourPunCallbacks
 {
@@ -11,7 +12,11 @@ public class RequestManager : MonoBehaviourPunCallbacks
     Dictionary<CharacterModel, Player> _dicPlayer = new Dictionary<CharacterModel, Player>();
     [SerializeField] private GameObject[] characterPrefab;
     [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private HudManager winHud;
+    private GameObject currentWinHud;
     public static RequestManager Instance => _instance;
+    private int playersAlive;
+    private bool canRestart;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,8 +30,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
             _instance = this;
         }
     }
-
-    // Update is called once per frame
+    #region Requests
     [PunRPC]
     public void RequestConnectPlayer(Player client)
     {
@@ -38,12 +42,9 @@ public class RequestManager : MonoBehaviourPunCallbacks
         GameObject obj = PhotonNetwork.Instantiate(characterPrefab[client.ActorNumber -2].name, spawnPoints[client.ActorNumber -2].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
         character.AssignStats(spawnPoints[client.ActorNumber -2]);
+        playersAlive++;
         _dicChars[client] = character;
         _dicPlayer[character] = client;
-    }
-    public void RPCMaster(string name, params object[] p)
-    {
-        photonView.RPC(name, PhotonNetwork.MasterClient, p);
     }
     [PunRPC]
     public void RequestMove(Player client, Vector3 dir)
@@ -62,16 +63,12 @@ public class RequestManager : MonoBehaviourPunCallbacks
     {
         FilterPlayer(client).Attack();
     }
-
-    [PunRPC]
-    public void RequestDie(Player client)
+    #endregion
+    
+    #region Utilities
+    public void RPCMaster(string name, params object[] p)
     {
-        FilterPlayer(client).Die();
-    }
-
-    public void RequestHit(Player client, int damage,Vector3 dir)
-    {
-        FilterPlayer(client).OnHitAction(damage,dir);
+        photonView.RPC(name, PhotonNetwork.MasterClient, p);
     }
 
     private CharacterModel FilterPlayer(Player client)
@@ -86,6 +83,12 @@ public class RequestManager : MonoBehaviourPunCallbacks
             return null;
         }
     }
+    
+
+    #endregion
+    
+    #region Photon Methods
+   
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         if (PhotonNetwork.IsMasterClient)
@@ -98,6 +101,11 @@ public class RequestManager : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    #endregion
+    
+    #region Remove Methods
+
     public void RemoveModel(CharacterModel model)
     {
         if (_dicPlayer.ContainsKey(model))
@@ -116,6 +124,12 @@ public class RequestManager : MonoBehaviourPunCallbacks
             _dicPlayer.Remove(character);
         }
     }
+
+
+    #endregion
+    
+    #region GetMethods
+
     public Player GetClientFromModel(CharacterModel model)
     {
         if (_dicPlayer.ContainsKey(model))
@@ -135,4 +149,64 @@ public class RequestManager : MonoBehaviourPunCallbacks
         }
         return characters;
     }
+
+    #endregion
+    public void PlayerDie()
+    {
+        playersAlive--;
+        if (playersAlive == 1)
+        {
+            CheckForWinner();
+            StartCoroutine(RestartGameRoutine());
+        }
+    }
+    private void CheckForWinner()
+    {
+        foreach (var model in GetAllModels())
+        {
+            if (!model.IsDead && PhotonNetwork.IsMasterClient)
+            {
+                currentWinHud = PhotonNetwork.Instantiate(winHud.gameObject.name, Vector3.zero, Quaternion.identity);
+                var hud = currentWinHud.GetComponent<HudManager>();
+                hud.photonView.RPC(nameof(hud.WinScreen),RpcTarget.All,GetClientFromModel(model).NickName);
+                break;
+            }else if (!PhotonNetwork.IsMasterClient)
+            {
+
+                
+            } 
+        }
+    }
+    // public void RequestWinner()
+    // {
+    //     foreach (var model in GetAllModels())
+    //     {
+    //         if (!model.IsDead)
+    //         { 
+    //             winHud.WinScreen(GetClientFromModel(model).NickName);
+    //             break;
+    //         } 
+    //     }
+    // }
+
+    IEnumerator RestartGameRoutine()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.R));
+            RestartGame();
+        }
+    }
+    private void RestartGame()
+    {
+        StopCoroutine(RestartGameRoutine());
+        PhotonNetwork.Destroy(currentWinHud);
+        playersAlive = 0;
+        foreach (var model in GetAllModels())
+        {
+            playersAlive++;
+            model.Respawn();
+        }
+    }
+
 }

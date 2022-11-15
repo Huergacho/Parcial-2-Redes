@@ -16,7 +16,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackForce: 3
-  damageAmount: 10
+  damageAmount: 50
   attackCooldown: 0.5
   speed: 3
   jumpForce: 8

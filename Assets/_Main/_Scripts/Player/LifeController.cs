@@ -17,11 +17,11 @@ public class LifeController : MonoBehaviour
 
     public void TakeDamage(int stat)
     {
-        if (currentLife + stat <= 0)
+        if (currentLife + stat<= 0)
         {
             OnDie?.Invoke();
         }
-        currentLife -= stat;
+        currentLife += stat;
         OnHit?.Invoke();
     }
 
