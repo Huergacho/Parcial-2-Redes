@@ -15,7 +15,7 @@ MonoBehaviour:
   AppSettings:
     AppIdRealtime: 88333094-d796-4415-a165-4b4628661a40
     AppIdFusion: 
-    AppIdChat: 
+    AppIdChat: 2862adfd-7925-4a6f-9715-30a69536e6d3
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
@@ -48,10 +48,16 @@ MonoBehaviour:
   - RequestJump
   - RequestAttack
   - RequestDie
+<<<<<<< Updated upstream
   - PlayerDie
   - CheckForWinner
   - RequestWinner
   - WinScreen
+=======
+  - GetMessage
+  - GetChatMessage
+  - RequestChat
+>>>>>>> Stashed changes
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
