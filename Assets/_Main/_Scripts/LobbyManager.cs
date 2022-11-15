@@ -57,7 +57,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void CheckForAllPlayersToJoin()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= minPlayers)
+        if (PhotonNetwork.CurrentRoom.PlayerCount < maxPlayers)
         {
             if (!PhotonNetwork.IsMasterClient)
             {
