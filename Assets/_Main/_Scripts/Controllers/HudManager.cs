@@ -6,12 +6,12 @@ public class HudManager : MonoBehaviourPun
 {
     [SerializeField] private GameObject winnerTextContainer;
     [SerializeField] private TextMeshProUGUI winnerText;
-    [SerializeField] private GameObject chat;
+  //  [SerializeField] private GameObject chat;
 
     private void Awake()
     {
         winnerTextContainer.SetActive(false);
-        chat.SetActive(false);
+    //    chat.SetActive(false);
     }
 
     [PunRPC]
@@ -23,7 +23,7 @@ public class HudManager : MonoBehaviourPun
     [PunRPC]
     public void ShowChat(bool status)
     {
-        chat.SetActive(status);
+       // chat.SetActive(status);
     }
     
 }

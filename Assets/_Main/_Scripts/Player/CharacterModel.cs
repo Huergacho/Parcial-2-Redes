@@ -17,7 +17,7 @@ public class CharacterModel : MonoBehaviour
     private CharacterView _view;
     private bool _isMoving;
     private bool _isDead = false;
-    private HudManager _chat;
+    [SerializeField] private GameObject _chat;
     public bool IsDead => _isDead;
     private void Awake()
     {
@@ -25,6 +25,11 @@ public class CharacterModel : MonoBehaviour
         _lifeController = GetComponent<LifeController>();
         _rb = GetComponent<Rigidbody>();
         _lifeController.AssignMaxLife(stats.MaxLife);
+    }
+
+    private void Start()
+    {
+        Chat(false);
     }
 
     private void Initialize()
@@ -104,8 +109,10 @@ public class CharacterModel : MonoBehaviour
         _rb.isKinematic = true;
         _rb.useGravity = false;
         _view.DieAnimation(true);
+        Chat(true);
         RequestManager.Instance.PlayerDie();
-        RequestManager.Instance.RPCMaster("RequestChat",this,true);
+        
+    //    RequestManager.Instance.RPCMaster("RequestChat",this,true);
     }
 
     public void Chat(bool status)
@@ -113,7 +120,8 @@ public class CharacterModel : MonoBehaviour
        // HudManager chat = FindObjectOfType<HudManager>();
         if (_chat!=null)
         {
-            _chat.ShowChat(status);
+            //_chat.ShowChat(status);
+            _chat.SetActive(status);
         }
     }
     public void Respawn()
@@ -126,7 +134,8 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = true;
         _rb.isKinematic = false;
         _isDead = false;
-        RequestManager.Instance.RPCMaster("RequestChat",this,false);
+        Chat(false);
+      //  RequestManager.Instance.RPCMaster("RequestChat",this,false);
     }
 
 
@@ -187,9 +196,9 @@ public class CharacterModel : MonoBehaviour
     #endregion
 
 
-    public void AssignStats(Transform spawnPoint, HudManager chat)
+    public void AssignStats(Transform spawnPoint)
     {
-        _chat = chat;
+        //_chat = chat;
         _spawnPoint = spawnPoint;
         Initialize();
     }

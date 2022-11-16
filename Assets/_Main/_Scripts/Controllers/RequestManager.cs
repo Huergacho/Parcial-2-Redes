@@ -41,7 +41,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
         }
         GameObject obj = PhotonNetwork.Instantiate(characterPrefab[client.ActorNumber -2].name, spawnPoints[client.ActorNumber -2].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
-        character.AssignStats(spawnPoints[client.ActorNumber -2],winHud);
+        character.AssignStats(spawnPoints[client.ActorNumber -2]);
         playersAlive++;
         _dicChars[client] = character;
         _dicPlayer[character] = client;
