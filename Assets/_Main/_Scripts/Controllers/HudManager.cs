@@ -20,13 +20,10 @@ public class HudManager : MonoBehaviourPun
         winnerTextContainer.SetActive(status);
         winnerText.text = text;
     }
+    [PunRPC]
     public void ShowChat(bool status)
     {
-        if (photonView.IsMine)
-        {
-            chat.SetActive(status);
-        }
-        
+        chat.SetActive(status);
     }
     
 }

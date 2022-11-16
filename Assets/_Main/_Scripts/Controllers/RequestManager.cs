@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -40,7 +41,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
         }
         GameObject obj = PhotonNetwork.Instantiate(characterPrefab[client.ActorNumber -2].name, spawnPoints[client.ActorNumber -2].position, Quaternion.identity);
         var character = obj.GetComponent<CharacterModel>();
-        character.AssignStats(spawnPoints[client.ActorNumber -2]);
+        character.AssignStats(spawnPoints[client.ActorNumber -2],winHud);
         playersAlive++;
         _dicChars[client] = character;
         _dicPlayer[character] = client;
@@ -93,6 +94,12 @@ public class RequestManager : MonoBehaviourPunCallbacks
         {
             return null;
         }
+    }
+
+    [PunRPC]
+    public void RequestChat(CharacterModel client, bool status)
+    {
+        winHud.photonView.RPC("ShowChat",FilterClient(client),status);
     }
     
 

@@ -17,6 +17,7 @@ public class CharacterModel : MonoBehaviour
     private CharacterView _view;
     private bool _isMoving;
     private bool _isDead = false;
+    private HudManager _chat;
     public bool IsDead => _isDead;
     private void Awake()
     {
@@ -104,15 +105,15 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = false;
         _view.DieAnimation(true);
         RequestManager.Instance.PlayerDie();
-        Chat(true);
+        RequestManager.Instance.RPCMaster("RequestChat",this,true);
     }
 
     public void Chat(bool status)
     {
-        HudManager chat = FindObjectOfType<HudManager>();
-        if (chat!=null)
+       // HudManager chat = FindObjectOfType<HudManager>();
+        if (_chat!=null)
         {
-            chat.ShowChat(status);
+            _chat.ShowChat(status);
         }
     }
     public void Respawn()
@@ -125,7 +126,7 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = true;
         _rb.isKinematic = false;
         _isDead = false;
-        Chat(false);
+        RequestManager.Instance.RPCMaster("RequestChat",this,false);
     }
 
 
@@ -186,8 +187,9 @@ public class CharacterModel : MonoBehaviour
     #endregion
 
 
-    public void AssignStats(Transform spawnPoint)
+    public void AssignStats(Transform spawnPoint, HudManager chat)
     {
+        _chat = chat;
         _spawnPoint = spawnPoint;
         Initialize();
     }
