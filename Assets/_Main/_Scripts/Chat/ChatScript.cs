@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -8,6 +9,13 @@ public class ChatScript : MonoBehaviourPun
     public TMP_InputField inputField;
     
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void ChatSendMessage()
     {

@@ -71,6 +71,11 @@ public class RequestManager : MonoBehaviourPunCallbacks
         photonView.RPC(name, PhotonNetwork.MasterClient, p);
     }
 
+    // public bool RPCMasterB(string name, params object[] p)
+    // {
+    //   //  return photonView.RPC(name, PhotonNetwork.MasterClient, p);
+    // }
+
     private CharacterModel FilterPlayer(Player client)
     {
         if (_dicChars.ContainsKey(client))
@@ -172,7 +177,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
     public void PlayerDie()
     {
         playersAlive--;
-        //winHud.photonView.RPC(nameof(winHud.ShowChat),FilterClient(model),true);
+
         if (playersAlive == 1)
         {
             CheckForWinner();
@@ -191,17 +196,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
             }
         }
     }
-    // public void RequestWinner()
-    // {
-    //     foreach (var model in GetAllModels())
-    //     {
-    //         if (!model.IsDead)
-    //         { 
-    //             winHud.WinScreen(GetClientFromModel(model).NickName);
-    //             break;
-    //         } 
-    //     }
-    // }
+
 
     IEnumerator RestartGameRoutine()
     {

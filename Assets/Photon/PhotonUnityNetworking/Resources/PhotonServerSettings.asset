@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: 88333094-d796-4415-a165-4b4628661a40
     AppIdFusion: 
     AppIdChat: 2862adfd-7925-4a6f-9715-30a69536e6d3
-    AppIdVoice: 
+    AppIdVoice: a8bed569-a902-4f06-8f5e-713452008cc0
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -28,26 +28,29 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: sa
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
+  - ChangeColour
   - ClickRpc
   - DestroyRpc
+  - HeresWhy
   - DestroySpaceship
   - Fire
   - GetChatMessage
   - RequestAttack
+  - RequestChat
   - RequestConnectPlayer
   - RequestJump
   - RequestMove
   - RespawnSpaceship
+  - ShowChat
   - StartGame
   - WinScreen
-  - ShowChat
-  - RequestChat
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0
