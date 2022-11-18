@@ -16,7 +16,7 @@ public class Meteors : MonoBehaviourPun
     {
         if (_currtime<=Time.time)
         {
-            PhotonNetwork.Destroy(photonView.gameObject);
+            Destroy(gameObject);
         }
     }
 }

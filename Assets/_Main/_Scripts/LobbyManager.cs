@@ -15,6 +15,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button startButton;
     [SerializeField] private TextMeshProUGUI startButtonText;
     [SerializeField] private int minPlayers;
+    [SerializeField] private int maxPlayers = 4;
     [SerializeField] private float tickCooldown = 1.5f;
    
     public TMP_InputField roomInputField;
@@ -66,7 +67,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (roomName.text.Length >= 1)
         {
-            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = (byte)(minPlayers +1) });
+            PhotonNetwork.CreateRoom(roomInputField.text, new RoomOptions() { MaxPlayers = (byte)(maxPlayers) });
         }
     }
 

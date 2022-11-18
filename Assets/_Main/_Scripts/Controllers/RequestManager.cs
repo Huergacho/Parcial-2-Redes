@@ -213,5 +213,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
             model.Respawn();
         }
     }
+    
+ 
 
 }
