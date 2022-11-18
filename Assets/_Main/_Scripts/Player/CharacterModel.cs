@@ -27,11 +27,6 @@ public class CharacterModel : MonoBehaviour
         _lifeController.AssignMaxLife(stats.MaxLife);
     }
 
-    private void Start()
-    {
-        Chat(false);
-    }
-
     private void Initialize()
     {
         transform.position = _spawnPoint.position;
@@ -109,21 +104,13 @@ public class CharacterModel : MonoBehaviour
         _rb.isKinematic = true;
         _rb.useGravity = false;
         _view.DieAnimation(true);
-        Chat(true);
+
         RequestManager.Instance.PlayerDie();
         
     //    RequestManager.Instance.RPCMaster("RequestChat",this,true);
     }
 
-    public void Chat(bool status)
-    {
-       // HudManager chat = FindObjectOfType<HudManager>();
-        if (_chat!=null)
-        {
-            //_chat.ShowChat(status);
-            _chat.SetActive(status);
-        }
-    }
+
     public void Respawn()
     {
         _view.DieAnimation(false);
@@ -134,8 +121,7 @@ public class CharacterModel : MonoBehaviour
         _rb.useGravity = true;
         _rb.isKinematic = false;
         _isDead = false;
-        Chat(false);
-      //  RequestManager.Instance.RPCMaster("RequestChat",this,false);
+     //  RequestManager.Instance.RPCMaster("RequestChat",this,false);
     }
 
 
@@ -198,7 +184,6 @@ public class CharacterModel : MonoBehaviour
 
     public void AssignStats(Transform spawnPoint)
     {
-        //_chat = chat;
         _spawnPoint = spawnPoint;
         Initialize();
     }
