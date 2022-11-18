@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 
 public class RequestManager : MonoBehaviourPunCallbacks
 {
+    public GameObject chatt;
     private static RequestManager _instance;
     Dictionary<Player, CharacterModel> _dicChars = new Dictionary<Player, CharacterModel>();
     Dictionary<CharacterModel, Player> _dicPlayer = new Dictionary<CharacterModel, Player>();
@@ -213,7 +214,19 @@ public class RequestManager : MonoBehaviourPunCallbacks
             model.Respawn();
         }
     }
+
+    public void RequestChat(CharacterModel model)
+    {
+
+     var client=   FilterClient(model);
+     
+     photonView.RPC("UpdateChat", client);
+    }
     
- 
+    [PunRPC]
+    public void UpdateChat()
+    {
+        chatt.SetActive(true);
+    }
 
 }

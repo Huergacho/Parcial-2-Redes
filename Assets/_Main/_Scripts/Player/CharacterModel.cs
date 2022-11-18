@@ -107,7 +107,7 @@ public class CharacterModel : MonoBehaviour
 
         RequestManager.Instance.PlayerDie();
         
-    //    RequestManager.Instance.RPCMaster("RequestChat",this,true);
+    RequestManager.Instance.RequestChat(this);
     }
 
 
