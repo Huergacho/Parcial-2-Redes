@@ -23,10 +23,10 @@ public class VoiceChatUI : MonoBehaviour
             var speaker = item.Key;
             if (speaker.IsPlaying)
             {
-                voiceChat += item.Value.NickName + "\n";
+                print(item.Value.NickName + " si");
+                voiceChat+=item.Value.NickName+"\n";
             }
         }
-
         text.text = voiceChat;
         if (voiceChat == "")
         {

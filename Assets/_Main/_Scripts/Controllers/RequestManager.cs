@@ -71,11 +71,6 @@ public class RequestManager : MonoBehaviourPunCallbacks
         photonView.RPC(name, PhotonNetwork.MasterClient, p);
     }
 
-    // public bool RPCMasterB(string name, params object[] p)
-    // {
-    //   //  return photonView.RPC(name, PhotonNetwork.MasterClient, p);
-    // }
-
     private CharacterModel FilterPlayer(Player client)
     {
         if (_dicChars.ContainsKey(client))

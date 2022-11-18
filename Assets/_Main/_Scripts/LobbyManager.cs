@@ -118,6 +118,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void UpdatePlayersWhenJoin(Player player)
     {
+        if(PhotonNetwork.IsMasterClient) return;
+        
         var newNick = Instantiate(nickNamePrefab, nickNameContent);
         newNick.text = player.NickName;
         _nickNames.Add(newNick);
@@ -131,7 +133,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private String CurrentPlayersText()
     {
-        return "CurrentPlayer" + PhotonNetwork.CurrentRoom.PlayerCount + "/" +
+        return "CurrentPlayer" + (PhotonNetwork.CurrentRoom.PlayerCount -1) + "/" +
             PhotonNetwork.CurrentRoom.MaxPlayers;
     }
 

@@ -8,10 +8,7 @@ using Photon.Voice.PUN;
 public class CharacterController : MonoBehaviourPun
 {
     [SerializeField] private KeyCode jumpInput;
-    [SerializeField] private float updateLifecd=1.5f;
     
-    // private float _lifeCheckCD;
-    // [SerializeField]private ChatScript _chat;
     
 
     private void Awake()
@@ -35,10 +32,10 @@ public class CharacterController : MonoBehaviourPun
         Move();
         Jump();
         Attack();
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             PunVoiceClient.Instance.PrimaryRecorder.TransmitEnabled = true;
-        } else if (Input.GetKeyUp(KeyCode.L))
+        } else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             PunVoiceClient.Instance.PrimaryRecorder.TransmitEnabled = false;
         }
@@ -70,16 +67,6 @@ public class CharacterController : MonoBehaviourPun
         {
             RequestManager.Instance.RPCMaster("RequestAttack",PhotonNetwork.LocalPlayer);
         }
-    }
-
-    private void CheckIsAlive()
-    {
-     //   bool isAlive = RequestManager.Instance.RPCMaster("RequestLife", PhotonNetwork.LocalPlayer);
-    }
-
-    private void SetChatStatus(bool status)
-    {
-       // _chat.gameObject.SetActive(status);
     }
     
 }
