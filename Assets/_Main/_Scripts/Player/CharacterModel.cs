@@ -5,7 +5,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class CharacterModel : MonoBehaviour
+public class CharacterModel : MonoBehaviourPun
 {
     [SerializeField] private Transform attackPoint;
     private Transform _spawnPoint;
@@ -97,6 +97,7 @@ public class CharacterModel : MonoBehaviour
     }
     public void Die()
     {
+        if(_isDead) return;
         _isDead = true;
         StopAllCoroutines();
         _view.StopAllCoroutines();
@@ -174,9 +175,12 @@ public class CharacterModel : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (LayerCompare.IsGoInLayerMask(other.gameObject, stats.KillZoneLayer))
+        if (photonView.IsMine)
         {
-            Die();
+            if (LayerCompare.IsGoInLayerMask(other.gameObject, stats.KillZoneLayer))
+            {
+                Die();
+            } 
         }
     }
     #endregion
