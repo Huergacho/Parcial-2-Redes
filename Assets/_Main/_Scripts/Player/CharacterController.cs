@@ -63,7 +63,7 @@ public class CharacterController : MonoBehaviourPun
 
     private void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             RequestManager.Instance.RPCMaster("RequestAttack",PhotonNetwork.LocalPlayer);
         }

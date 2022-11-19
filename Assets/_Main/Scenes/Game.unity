@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Default Platform (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8676224767826470517, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -578,7 +582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8676224767826470517, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_RootOrder
@@ -829,6 +833,10 @@ PrefabInstance:
     - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_Name
       value: Default Platform (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8676224767826470517, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_RootOrder
@@ -1130,6 +1138,10 @@ PrefabInstance:
     - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_Name
       value: Default Platform (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8676224767826470517, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_RootOrder
@@ -2760,6 +2772,10 @@ PrefabInstance:
     - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_Name
       value: Default Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676224767826470516, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8676224767826470517, guid: 57d6dc14d2a019d448a95dceb83844c1, type: 3}
       propertyPath: m_RootOrder

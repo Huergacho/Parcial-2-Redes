@@ -84,7 +84,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
             return null;
         }
     }    
-    private Player FilterClient(CharacterModel client)
+    private Player FilterModel(CharacterModel client)
     {
         if (_dicPlayer.ContainsKey(client))
         {
@@ -100,7 +100,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RequestChat(CharacterModel client, bool status)
     {
-        winHud.photonView.RPC("ShowChat",FilterClient(client),status);
+        winHud.photonView.RPC("ShowChat",FilterModel(client),status);
     }
     
 
@@ -173,7 +173,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
     public void PlayerDie()
     {
         playersAlive--;
-
+        
         if (playersAlive == 1)
         {
             CheckForWinner();
@@ -218,11 +218,23 @@ public class RequestManager : MonoBehaviourPunCallbacks
     public void RequestChat(CharacterModel model)
     {
 
-     var client=   FilterClient(model);
+     var client=   FilterModel(model);
      
      photonView.RPC("UpdateChat", client);
     }
-    
+
+    [PunRPC]
+    public void RequestDie(CharacterModel model)
+    {
+        var client = FilterModel(model);
+        photonView.RPC(nameof(UpdateDie),client);
+    }
+
+    [PunRPC]
+    public void UpdateDie(Player client)
+    { 
+        FilterPlayer(client).DiePropertiesAssign();
+    }
     [PunRPC]
     public void UpdateChat()
     {

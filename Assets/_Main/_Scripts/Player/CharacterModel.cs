@@ -31,6 +31,7 @@ public class CharacterModel : MonoBehaviourPun
     {
         transform.position = _spawnPoint.position;
         _currentJumps = 0;
+        _lifeController.AssignMaxLife(stats.MaxLife);
         _lifeController.OnDie += Die;
     }
 
@@ -95,22 +96,27 @@ public class CharacterModel : MonoBehaviourPun
             }
         }
     }
+
     public void Die()
     {
-        if(_isDead) return;
+        if (_isDead) return;
+        photonView.RPC(nameof(DiePropertiesAssign),RpcTarget.All);
+
+        RequestManager.Instance.PlayerDie();
+        RequestManager.Instance.RequestChat(this);
+    }
+    [PunRPC]
+    public void DiePropertiesAssign()
+    {
+        print("A fleee");
         _isDead = true;
         StopAllCoroutines();
         _view.StopAllCoroutines();
-        _rb.detectCollisions = false;
+        gameObject.GetComponent<Collider>().enabled = false;
         _rb.isKinematic = true;
         _rb.useGravity = false;
         _view.DieAnimation(true);
-
-        RequestManager.Instance.PlayerDie();
-        
-    RequestManager.Instance.RequestChat(this);
     }
-
 
     public void Respawn()
     {
@@ -118,7 +124,8 @@ public class CharacterModel : MonoBehaviourPun
         _lifeController.Reset();
         transform.position = _spawnPoint.position;
         _currentJumps = 0;
-        _rb.detectCollisions = true;
+        gameObject.GetComponent<Collider>().enabled = true;
+        gameObject.GetComponent<PhotonRigidbodyView>().enabled = true;
         _rb.useGravity = true;
         _rb.isKinematic = false;
         _isDead = false;

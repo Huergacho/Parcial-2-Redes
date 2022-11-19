@@ -53,6 +53,9 @@ MonoBehaviour:
   - WinScreen
   - SetActiveMeteor
   - UpdateChat
+  - UpdateDie
+  - RequestDie
+  - DiePropertiesAssign
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
