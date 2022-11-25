@@ -108,7 +108,6 @@ public class CharacterModel : MonoBehaviourPun
     [PunRPC]
     public void DiePropertiesAssign()
     {
-        print("A fleee");
         _isDead = true;
         StopAllCoroutines();
         _view.StopAllCoroutines();

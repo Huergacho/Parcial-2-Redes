@@ -38,23 +38,23 @@ public class MeteorSpawner : MonoBehaviourPun
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (currTime<=Time.time)
-        {
-            ReleaseMeteor();
-            
-            ResetTimer();
-            if (_meteorsPool.Count<=4)
-            {
-                RefillSpool();
-            }
-            
-        }
-    }
+    // // Update is called once per frame
+    // void Update()
+    // {
+    //     if (currTime<=Time.time)
+    //     {
+    //         ReleaseMeteor();
+    //         
+    //         ResetTimer();
+    //         if (_meteorsPool.Count<=4)
+    //         {
+    //             RefillSpool();
+    //         }
+    //         
+    //     }
+    // }
 
-    void ReleaseMeteor()
+    public void ReleaseMeteor()
     {
         var spawn = GetSpawnPoint();
 
@@ -87,7 +87,7 @@ public class MeteorSpawner : MonoBehaviourPun
 
     void RefillSpool()
     {
-        var meteor  = PhotonNetwork.Instantiate(meteorPref.name, Vector3.zero, Quaternion.identity);
+        var meteor  = PhotonNetwork.Instantiate(meteorPref.name, new Vector3(0,3000000,0), Quaternion.identity);
         meteor.SetActive(false);
         _meteorsPool.Add(meteor);
     }

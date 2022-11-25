@@ -7,6 +7,7 @@ public class ChatScript : MonoBehaviourPun
 {
     public TextMeshProUGUI content;
     public TMP_InputField inputField;
+    private string _command = "/m";
     
     // Start is called before the first frame update
     private void Awake()
@@ -21,7 +22,19 @@ public class ChatScript : MonoBehaviourPun
     {
         var message = inputField.text;
         if (string.IsNullOrEmpty(message)||string.IsNullOrWhiteSpace(message)) return;
-        photonView.RPC(nameof(GetChatMessage), RpcTarget.All,PhotonNetwork.NickName,message);
+       
+        string[] words = message.Split(' ');
+
+        if (words[0] == _command && Char.IsDigit(words[1],0)) //checks if it is a number
+        {
+            var thisMuchMeteorits = Int32.Parse(words[1].Substring(0));
+            
+          RequestManager.Instance.RPCMaster("RequestMeteorito",thisMuchMeteorits);   
+        }
+        else
+        {
+            photonView.RPC(nameof(GetChatMessage), RpcTarget.All,PhotonNetwork.NickName,message);
+        }
     }
 
     [PunRPC]

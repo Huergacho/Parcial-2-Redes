@@ -16,6 +16,7 @@ public class RequestManager : MonoBehaviourPunCallbacks
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private HudManager winHud;
     private GameObject currentWinHud;
+    [SerializeField] private MeteorSpawner _loMeteorito; 
     public static RequestManager Instance => _instance;
     private int playersAlive;
     private bool canRestart;
@@ -83,7 +84,28 @@ public class RequestManager : MonoBehaviourPunCallbacks
         {
             return null;
         }
-    }    
+    }
+
+    [PunRPC]
+    private void RequestMeteorito(int howManyMeteorits)
+    {
+        StartCoroutine(WaitNextMeteor(2,howManyMeteorits));
+
+//        print(howManyMeteorits);
+
+    }
+
+    IEnumerator WaitNextMeteor(int seconds, int howManyMeteorits)
+    {
+        WaitForSeconds wait = new WaitForSeconds(seconds);
+        for (int i = 0; i < howManyMeteorits; i++)
+        {
+            _loMeteorito.ReleaseMeteor();
+            yield return wait;
+        }
+        
+    }
+    
     private Player FilterModel(CharacterModel client)
     {
         if (_dicPlayer.ContainsKey(client))
